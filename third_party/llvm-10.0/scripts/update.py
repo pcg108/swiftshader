@@ -46,6 +46,7 @@ LLVM_TARGETS = [
     ('X86', ('__i386__', '__x86_64__')),
     ('Mips', ('__mips__',)),
     ('PowerPC', ('__powerpc64__',)),
+    ('RISCV', ('__riscv',)),
 ]
 
 # Per-platform arches
@@ -64,6 +65,7 @@ LLVM_TRIPLES = {
         ('__mips__', 'mipsel-linux-gnu'),
         ('__mips64', 'mips64el-linux-gnuabi64'),
         ('__powerpc64__', 'powerpc64le-unknown-linux-gnu'),
+        ('__riscv', 'riscv64-unknown-linux-gnu')
     ],
     'darwin': [
         ('__x86_64__', 'x86_64-apple-darwin'),
@@ -196,6 +198,7 @@ def clone_llvm():
         run_command('echo /llvm > .git/info/sparse-checkout', 2)
         run_command('git fetch origin {}'.format(LLVM_BRANCH), 2)
         run_command('git checkout {}'.format(LLVM_COMMIT), 2)
+        # run_command('wget -O ./llvm/cmake/config.guess "http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD"', 2)
     return
 
 
@@ -246,6 +249,7 @@ def copy_common_generated_files(dst_base):
         path.join('lib', 'Transforms', 'InstCombine'),
     ] + [path.join('lib', 'Target', arch) for arch, defs in LLVM_TARGETS]
     for subdir in subdirs:
+        print('Going for subdir: {}', subdir)
         for src, dst in list_files(LLVM_OBJS, subdir, dst_base, suffixes):
             log('{} -> {}'.format(src, dst), 2)
             os.makedirs(path.dirname(dst), exist_ok=True)

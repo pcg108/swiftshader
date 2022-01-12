@@ -86,6 +86,7 @@ llvm_include_dirs = [
   "llvm/lib/Target/ARM/",
   "llvm/lib/Target/Mips/",
   "llvm/lib/Target/PowerPC/",
+  "llvm/lib/Target/RISCV/",
   "llvm/lib/Target/X86/",
   "configs/common/include/",
   "configs/common/lib/IR/",
@@ -93,6 +94,7 @@ llvm_include_dirs = [
   "configs/common/lib/Target/ARM/",
   "configs/common/lib/Target/Mips/",
   "configs/common/lib/Target/PowerPC/",
+  "configs/common/lib/Target/RISCV/",
   "configs/common/lib/Target/X86/",
   "configs/common/lib/Transforms/InstCombine/",
 ]

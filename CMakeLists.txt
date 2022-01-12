@@ -426,6 +426,12 @@ else()
         "-Wmissing-braces"
     )
 
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "rv*")
+        list(APPEND SWIFTSHADER_COMPILE_OPTIONS
+            "-Wno-maybe-uninitialized"
+        )
+    endif()
+
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
         if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 9)
             list(APPEND SWIFTSHADER_COMPILE_OPTIONS
