@@ -521,7 +521,7 @@ else()
         set_cpp_flag("-mxgot")
     endif()
     if(ARCH STREQUAL "rv64")
-        set_cpp_flag("-march=rv64ifd")
+        set_cpp_flag("-march=rv64imafd")
         set_cpp_flag("-mabi=lp64d")
     endif()
 
