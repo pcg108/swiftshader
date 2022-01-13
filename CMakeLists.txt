@@ -429,6 +429,7 @@ else()
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "rv*")
         list(APPEND SWIFTSHADER_COMPILE_OPTIONS
             "-Wno-maybe-uninitialized"
+            "-Wno-uninitialized"
         )
     endif()
 
