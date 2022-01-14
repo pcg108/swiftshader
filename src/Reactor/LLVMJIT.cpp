@@ -190,6 +190,8 @@ JITGlobals *JITGlobals::get()
 
 #if LLVM_VERSION_MAJOR >= 11 /* TODO(b/165000222): Unconditional after LLVM 11 upgrade */
 		jitTargetMachineBuilder.setCPU(std::string(llvm::sys::getHostCPUName()));
+#elif defined(__riscv) && __riscv_xlen == 64
+                jitTargetMachineBuilder.setCPU("generic-rv64");
 #else
 		jitTargetMachineBuilder.setCPU(llvm::sys::getHostCPUName());
 #endif
