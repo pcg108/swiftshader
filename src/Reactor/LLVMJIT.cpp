@@ -192,6 +192,11 @@ JITGlobals *JITGlobals::get()
 		jitTargetMachineBuilder.setCPU(std::string(llvm::sys::getHostCPUName()));
 #elif defined(__riscv) && __riscv_xlen == 64
                 jitTargetMachineBuilder.setCPU("generic-rv64");
+                jitTargetMachineBuilder.getFeatures().AddFeature("+m");
+                jitTargetMachineBuilder.getFeatures().AddFeature("+a");
+                jitTargetMachineBuilder.getFeatures().AddFeature("+f");
+                jitTargetMachineBuilder.getFeatures().AddFeature("+d");
+                jitTargetMachineBuilder.getFeatures().AddFeature("+c");
 #else
 		jitTargetMachineBuilder.setCPU(llvm::sys::getHostCPUName());
 #endif
