@@ -144,8 +144,17 @@ target_compile_options(ReactorLLVM
         ${ROOT_PROJECT_COMPILE_OPTIONS}
 )
 
+find_package(LLVM 13.0.1 EXACT REQUIRED CONFIG)
+
+message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+
+llvm_map_components_to_libnames(llvm_libs support core irreader orcjit native)
+
 target_link_libraries(ReactorLLVM
     PRIVATE
-        llvm
+        ${llvm_libs}
         ${REACTOR_PRIVATE_LINK_LIBRARIES}
 )
+
+include_directories(${LLVM_INCLUDE_DIRS})

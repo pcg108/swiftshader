@@ -155,7 +155,7 @@ JITGlobals *JITGlobals::get()
 #else
 		// TODO(b/191193823): TODO(ndesaulniers): Update this after
 		// go/compilers/fc018ebb608ee0c1239b405460e49f1835ab6175
-#	if LLVM_VERSION_MAJOR < 9999
+#	if LLVM_VERSION_MAJOR < 13
 #		error Implement stack size checks using the "warn-stack-size" function attribute.
 #	endif
 #endif
@@ -188,15 +188,15 @@ JITGlobals *JITGlobals::get()
 			jitTargetMachineBuilder.getFeatures().AddFeature(feature.first(), feature.second);
 		}
 
-#if LLVM_VERSION_MAJOR >= 11 /* TODO(b/165000222): Unconditional after LLVM 11 upgrade */
-		jitTargetMachineBuilder.setCPU(std::string(llvm::sys::getHostCPUName()));
-#elif defined(__riscv) && __riscv_xlen == 64
+#if defined(__riscv) && __riscv_xlen == 64
                 jitTargetMachineBuilder.setCPU("generic-rv64");
                 jitTargetMachineBuilder.getFeatures().AddFeature("+m");
                 jitTargetMachineBuilder.getFeatures().AddFeature("+a");
                 jitTargetMachineBuilder.getFeatures().AddFeature("+f");
                 jitTargetMachineBuilder.getFeatures().AddFeature("+d");
-                jitTargetMachineBuilder.getFeatures().AddFeature("+c");
+                //jitTargetMachineBuilder.getFeatures().AddFeature("+c");
+#elif LLVM_VERSION_MAJOR >= 11 /* TODO(b/165000222): Unconditional after LLVM 11 upgrade */
+		jitTargetMachineBuilder.setCPU(std::string(llvm::sys::getHostCPUName()));
 #else
 		jitTargetMachineBuilder.setCPU(llvm::sys::getHostCPUName());
 #endif
