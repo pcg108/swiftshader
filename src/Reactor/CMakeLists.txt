@@ -144,7 +144,7 @@ target_compile_options(ReactorLLVM
         ${ROOT_PROJECT_COMPILE_OPTIONS}
 )
 
-find_package(LLVM 13.0.1 EXACT REQUIRED CONFIG)
+find_package(LLVM 14 EXACT REQUIRED CONFIG PATHS /home/debian/coding/llvm-project/llvm/build-without-tests-with-pic-with-rtti/lib/cmake/llvm/)
 
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
