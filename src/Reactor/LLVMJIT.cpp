@@ -28,7 +28,7 @@ __pragma(warning(push))
 
 #include "llvm/ExecutionEngine/Orc/CompileUtils.h"
 #include "llvm/ExecutionEngine/Orc/IRCompileLayer.h"
-#include "llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h"
+#include "llvm/ExecutionEngine/Orc/ObjectLinkingLayer.h"
 #include "llvm/ExecutionEngine/SectionMemoryManager.h"
 #include "llvm/IR/DiagnosticInfo.h"
 #include "llvm/IR/LegacyPassManager.h"
@@ -194,7 +194,8 @@ JITGlobals *JITGlobals::get()
                 jitTargetMachineBuilder.getFeatures().AddFeature("+a");
                 jitTargetMachineBuilder.getFeatures().AddFeature("+f");
                 jitTargetMachineBuilder.getFeatures().AddFeature("+d");
-                //jitTargetMachineBuilder.getFeatures().AddFeature("+c");
+                jitTargetMachineBuilder.getFeatures().AddFeature("+c");
+                jitTargetMachineBuilder.setCodeModel(llvm::Optional(llvm::CodeModel::Medium));
 #elif LLVM_VERSION_MAJOR >= 11 /* TODO(b/165000222): Unconditional after LLVM 11 upgrade */
 		jitTargetMachineBuilder.setCPU(std::string(llvm::sys::getHostCPUName()));
 #else
@@ -711,10 +712,7 @@ public:
 #if LLVM_VERSION_MAJOR >= 13
 	    , session(std::move(*llvm::orc::SelfExecutorProcessControl::Create()))
 #endif
-	    , objectLayer(session, []() {
-		    static MemoryMapper memoryMapper;
-		    return std::make_unique<llvm::SectionMemoryManager>(&memoryMapper);
-	    })
+	    , objectLayer(session, cantFail(llvm::jitlink::InProcessMemoryManager::Create()))
 	    , addresses(count)
 	{
 		bool fatalCompileIssue = false;
@@ -817,7 +815,7 @@ public:
 private:
 	std::string name;
 	llvm::orc::ExecutionSession session;
-	llvm::orc::RTDyldObjectLinkingLayer objectLayer;
+	llvm::orc::ObjectLinkingLayer objectLayer;
 	std::vector<const void *> addresses;
 };
 
