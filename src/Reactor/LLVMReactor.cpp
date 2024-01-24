@@ -4421,7 +4421,7 @@ std::shared_ptr<Routine> Nucleus::acquireCoroutine(const char *name, const Confi
 		pm.add(llvm::createCoroEarlyLegacyPass());
 		pm.add(llvm::createCoroSplitLegacyPass());
 		pm.add(llvm::createCoroElideLegacyPass());
-		pm.add(llvm::createBarrierNoopPass());
+		pm.add((llvm::Pass*) llvm::createBarrierNoopPass());
 		pm.add(llvm::createCoroCleanupLegacyPass());
 
 		pm.run(*jit->module);
